@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+  <target name="main">
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+    <foreach param="fileName" target="bisonConvert">
+      <fileset dir="${basedir}/src" casesensitive="yes">
+        <include name="**/*.y"/>
+      </fileset>
+    </foreach>
+  </target>
+  <target name="bisonConvert">
+    <pathconvert property="java_file">
+      <chainedmapper>
+        <globmapper from="${basedir}/src/main/java/*.y" to="${basedir}/target/generated-sources/bison/*.java"/>
+      </chainedmapper>
+      <path location="${fileName}"/>
+    </pathconvert>
+    <dirname property="java_file.dir" file="${java_file}"/>
+    <echo message="${fileName}"/>
+    <echo message="${java_file}"/>
+    <echo message="${java_file.dir}"/>
+    <mkdir dir="${java_file.dir}"/>
+
+    <exec executable="bison">
+      <arg value="${fileName}"/>
+      <arg value="--output"/>
+      <arg value="${java_file}"/>
+    </exec>
+  </target>
+</project>
