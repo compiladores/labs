@@ -12,7 +12,7 @@
 %token NEWLINE
 %token NUMBER
 %token SYMBOL
-%token STRING,
+%token STRING
 %token DOT
 
 %code imports{
@@ -31,6 +31,10 @@
 input: 
   line input  { $$=$1.toString()+$2.toString(); setValue($1.toString()+$2.toString()); }
 | line        { $$=$1.toString(); setValue($1.toString()); }
+;
+
+line:
+ atom NEWLINE { $$=$1; }
 ;
 
 atom:
